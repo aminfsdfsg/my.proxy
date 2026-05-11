@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Secure Proxy</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        iframe { width: 100%; height: 80vh; border: 1px solid #ccc; margin-top: 10px; }
+        input { width: 70%; padding: 10px; }
+        button { padding: 10px 15px; }
+    </style>
+</head>
+<body>
+    <h2>Enter a Website URL</h2>
+    <input type="text" id="url" value="https://chatgpt.com">
+    <button onclick="loadPage()">Go</button>
+    <iframe id="content"></iframe>
+
+    <script>
+        async function loadPage() {
+            const targetUrl = document.getElementById('url').value;
+            const corsProxy = 'https://api.allorigins.win/raw?url=';
+            try {
+                const response = await fetch(corsProxy + encodeURIComponent(targetUrl));
+                const html = await response.text();
+                const iframe = document.getElementById('content');
+                const blob = new Blob([html], {type: 'text/html'});
+                iframe.src = URL.createObjectURL(blob);
+            } catch (e) {
+                alert('Error loading the page. Please try again.');
+            }
+        }
+        window.onload = loadPage;
+    </script>
+</body>
+</html>
